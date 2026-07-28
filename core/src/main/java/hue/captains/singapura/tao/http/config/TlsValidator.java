@@ -14,7 +14,7 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
  * if (!report.validAt(Instant.now())) { ...warn about expiry... }
  * }</pre>
  *
- * <p>Only JKS is handled today; the switch is exhaustive over the sealed
+ * <p>JKS and PKCS#12 are handled today; the switch is exhaustive over the sealed
  * {@link ResolvedTlsCredential}, so adding a format is a compile-time prompt to add its
  * validator here.</p>
  */
@@ -23,6 +23,7 @@ public final class TlsValidator implements StatelessFunctionalObject {
     public TlsValidationReport validate(ResolvedTlsCredential resolved) throws TlsValidationException {
         return switch (resolved) {
             case ResolvedTlsCredential.Jks jks -> new JksTlsValidator().validate(jks);
+            case ResolvedTlsCredential.Pkcs12 p12 -> new Pkcs12TlsValidator().validate(p12);
         };
     }
 }

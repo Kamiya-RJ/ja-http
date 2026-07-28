@@ -1,11 +1,15 @@
 package hue.captains.singapura.tao.http.vertx;
 
+import hue.captains.singapura.tao.http.config.ByteSourceProvider;
 import hue.captains.singapura.tao.http.config.HostConfig;
+import hue.captains.singapura.tao.http.config.PasswordProvider;
 import hue.captains.singapura.tao.http.config.TlsCredential;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.net.JksOptions;
 import io.vertx.core.net.KeyCertOptions;
+import io.vertx.core.net.KeyStoreOptionsBase;
+import io.vertx.core.net.PfxOptions;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -38,19 +42,27 @@ public final class VertxTls {
     private static KeyCertOptions keyCertOptions(TlsCredential credential) {
         try {
             return switch (credential) {
-                case TlsCredential.Jks jks -> {
-                    char[] password = jks.password().get();
-                    try {
-                        yield new JksOptions()
-                                .setValue(Buffer.buffer(jks.store().get()))
-                                .setPassword(new String(password));
-                    } finally {
-                        Arrays.fill(password, '\0');
-                    }
-                }
+                case TlsCredential.Jks jks ->
+                        keyStore(new JksOptions(), jks.store(), jks.password());
+                case TlsCredential.Pkcs12 p12 ->
+                        keyStore(new PfxOptions(), p12.store(), p12.password());
             };
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to obtain TLS material", e);
+        }
+    }
+
+    /** Installs provider-supplied bytes + password into a keystore-backed options object. */
+    private static KeyCertOptions keyStore(KeyStoreOptionsBase options,
+                                           ByteSourceProvider store,
+                                           PasswordProvider password) throws IOException {
+        char[] secret = password.get();
+        try {
+            return options
+                    .setValue(Buffer.buffer(store.get()))
+                    .setPassword(new String(secret));
+        } finally {
+            Arrays.fill(secret, '\0');
         }
     }
 }

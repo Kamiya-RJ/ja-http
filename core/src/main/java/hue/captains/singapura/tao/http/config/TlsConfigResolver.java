@@ -26,6 +26,9 @@ public final class TlsConfigResolver implements StatelessFunctionalObject {
             case TlsCredential.Jks jks -> new ResolvedTlsCredential.Jks(
                     jks.store().get(),
                     jks.password().get());
+            case TlsCredential.Pkcs12 p12 -> new ResolvedTlsCredential.Pkcs12(
+                    p12.store().get(),
+                    p12.password().get());
         };
     }
 }

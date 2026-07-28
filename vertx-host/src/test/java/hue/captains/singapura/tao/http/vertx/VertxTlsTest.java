@@ -4,6 +4,7 @@ import hue.captains.singapura.tao.http.config.HostConfig;
 import hue.captains.singapura.tao.http.config.TlsConfig;
 import hue.captains.singapura.tao.http.config.TlsCredential;
 import io.vertx.core.net.JksOptions;
+import io.vertx.core.net.PfxOptions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -38,6 +39,19 @@ class VertxTlsTest {
         var jks = assertInstanceOf(JksOptions.class, opts.getKeyCertOptions());
         assertEquals("changeit", jks.getPassword());
         assertArrayEquals(ksBytes, jks.getValue().getBytes());
+    }
+
+    @Test
+    void httpsBuildsPfxOptionsForPkcs12() {
+        var ksBytes = "fake-p12-bytes".getBytes();
+        var tls = new TlsConfig(new TlsCredential.Pkcs12(() -> ksBytes, () -> "changeit".toCharArray()));
+
+        var opts = VertxTls.serverOptions(HostConfig.https(8443, tls));
+
+        assertTrue(opts.isSsl());
+        var pfx = assertInstanceOf(PfxOptions.class, opts.getKeyCertOptions());
+        assertEquals("changeit", pfx.getPassword());
+        assertArrayEquals(ksBytes, pfx.getValue().getBytes());
     }
 
     @Test
