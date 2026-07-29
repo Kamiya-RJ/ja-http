@@ -11,11 +11,21 @@ package hue.captains.singapura.tao.http.config;
 public sealed interface ResolvedTlsCredential
         permits ResolvedTlsCredential.Jks, ResolvedTlsCredential.Pkcs12 {
 
-    /** A resolved JKS keystore: the raw keystore bytes plus the store password. */
+    /**
+     * A resolved JKS keystore: the raw keystore bytes plus the store password.
+     *
+     * @param keyStore the raw keystore bytes
+     * @param password the keystore password
+     */
     record Jks(byte[] keyStore, char[] password) implements ResolvedTlsCredential {
     }
 
-    /** A resolved PKCS#12 keystore: the raw keystore bytes plus the store password. */
+    /**
+     * A resolved PKCS#12 keystore: the raw keystore bytes plus the store password.
+     *
+     * @param keyStore the raw keystore bytes
+     * @param password the keystore password
+     */
     record Pkcs12(byte[] keyStore, char[] password) implements ResolvedTlsCredential {
     }
 }

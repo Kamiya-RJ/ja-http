@@ -6,6 +6,8 @@ import hue.captains.singapura.tao.http.config.PasswordSpec;
  * Built-in {@link PasswordSpec}: a literal password held in memory.
  * Convenient for development and tests; prefer an externalized source in production.
  * Fulfilled by {@link LiteralPasswordResolver}.
+ *
+ * @param value the password characters
  */
 public record LiteralPassword(char[] value) implements PasswordSpec {
 

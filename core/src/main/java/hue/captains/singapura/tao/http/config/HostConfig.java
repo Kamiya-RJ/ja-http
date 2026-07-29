@@ -4,6 +4,10 @@ package hue.captains.singapura.tao.http.config;
  * Pure value object carrying a host's bind address, port, and optional TLS configuration.
  * <p>
  * Replaces the bare {@code int port} previously threaded through the host constructors.
+ *
+ * @param host the bind address (e.g. {@code "0.0.0.0"} for all interfaces)
+ * @param port the port to listen on
+ * @param tls  the TLS configuration, or {@code null} to serve plain HTTP
  */
 public record HostConfig(String host, int port, TlsConfig tls) {
 

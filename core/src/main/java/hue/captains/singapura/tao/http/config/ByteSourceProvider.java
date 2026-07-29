@@ -14,5 +14,11 @@ import java.io.IOException;
 @FunctionalInterface
 public interface ByteSourceProvider {
 
+    /**
+     * Produces the bytes.
+     *
+     * @return the material (keystore, certificate chain, or key)
+     * @throws IOException if the material cannot be obtained
+     */
     byte[] get() throws IOException;
 }

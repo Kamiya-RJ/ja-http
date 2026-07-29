@@ -13,9 +13,19 @@ import java.io.IOException;
  */
 public interface ByteSourceResolver<S extends ByteSourceSpec> {
 
-    /** The concrete spec class this resolver handles. */
+    /**
+     * The concrete spec class this resolver handles.
+     *
+     * @return the spec type used for registry dispatch
+     */
     Class<S> specType();
 
-    /** Produces the bytes described by {@code spec}. */
+    /**
+     * Produces the bytes described by {@code spec}.
+     *
+     * @param spec the spec to fulfil
+     * @return the resolved bytes
+     * @throws IOException if the material cannot be obtained
+     */
     byte[] resolve(S spec) throws IOException;
 }

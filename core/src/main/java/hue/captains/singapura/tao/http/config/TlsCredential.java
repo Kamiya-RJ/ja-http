@@ -17,6 +17,9 @@ public sealed interface TlsCredential permits TlsCredential.Jks, TlsCredential.P
      * lambda, or via the {@link TlsResolvers} spec/resolver utility suite).
      *
      * <p>JKS is Java's legacy proprietary format; prefer {@link Pkcs12} for new keystores.</p>
+     *
+     * @param store    supplies the keystore bytes
+     * @param password supplies the keystore password
      */
     record Jks(ByteSourceProvider store, PasswordProvider password) implements TlsCredential {
     }
@@ -24,6 +27,9 @@ public sealed interface TlsCredential permits TlsCredential.Jks, TlsCredential.P
     /**
      * A PKCS#12 keystore ({@code .p12} / {@code .pfx}) — the industry-standard container and
      * the JDK's default since Java 9. Same two-provider shape as {@link Jks}.
+     *
+     * @param store    supplies the keystore bytes
+     * @param password supplies the keystore password
      */
     record Pkcs12(ByteSourceProvider store, PasswordProvider password) implements TlsCredential {
     }
